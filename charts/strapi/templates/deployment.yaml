@@ -14,6 +14,7 @@ spec:
       labels:
         app: strapi
       annotations:
+        backup.velero.io/backup-volumes: strapi-data
         # ХУКИ ДЛЯ VELERO (SQLite Backup)
         pre.backup.velero.io/command: '["/bin/sh", "-c", "sqlite3 /opt/app/.tmp/data.db \".backup /opt/app/.tmp/data_backup.db\""]'
         pre.backup.velero.io/container: strapi
