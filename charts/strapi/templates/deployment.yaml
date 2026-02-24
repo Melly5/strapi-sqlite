@@ -24,6 +24,15 @@ spec:
         - name: strapi
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: ADMIN_JWT_SECRET
+              value: "temporary_secret_for_recovery"
+            - name: JWT_SECRET
+              value: "another_temporary_secret"
+            - name: APP_KEYS
+              value: "key1,key2,key3,key4"
+            - name: API_TOKEN_SALT
+              value: "temporary_salt"
           ports:
             - containerPort: 1337
           volumeMounts:
