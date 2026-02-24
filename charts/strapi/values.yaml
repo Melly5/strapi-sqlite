@@ -1,0 +1,13 @@
+image:
+  repository: strapi-sqlite # Имя образа, который соберет Jenkins
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 1337
+
+persistence:
+  enabled: true
+  size: 1Gi
+  mountPath: /opt/app/.tmp # Папка, где Strapi хранит sqlite базу
