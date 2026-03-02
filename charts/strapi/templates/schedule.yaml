@@ -1,0 +1,21 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: strapi-cms     
+  namespace: {{ .Release.Namespace }}       # ns вашей команды - НЕ ОЧЕНЬ понимаю, что значит неймспейс команды, но я так понимаю он совпадает с неймспейсом ресурсов
+  labels:
+    team: web          
+spec:
+  schedule: "0 2 * * *" # каждый день для теста
+  template:
+    includedNamespaces:
+      - {{ .Release.Namespace }}
+    includedResources:
+      - persistentvolumeclaims
+      - persistentvolumes
+    defaultVolumesToFsBackup: true
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ .Chart.Name }}
+    ttl: 336h0m0s         

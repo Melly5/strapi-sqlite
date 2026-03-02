@@ -7,7 +7,7 @@ pipeline {
                 sh "docker build -t strapi-sqlite:${env.BUILD_NUMBER} ."
             }
         }
-                stage('Push to Minikube') {
+        stage('Push to Minikube') {
             steps {
                 // Закидываем образ в Minikube, чтобы он его увидел без внешнего реестра
                 sh "minikube image load strapi-sqlite:${env.BUILD_NUMBER}"
