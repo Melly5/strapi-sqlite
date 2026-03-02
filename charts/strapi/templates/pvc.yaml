@@ -4,6 +4,7 @@ metadata:
   name: {{ include "strapi.fullname" . }}-pvc
   labels:
     app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ .Chart.Name }}
 spec:
   accessModes:
     - ReadWriteOnce

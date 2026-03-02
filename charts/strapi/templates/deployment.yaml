@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: strapi
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ .Chart.Name }}
       annotations:
         backup.velero.io/backup-volumes: strapi-data
         pre.backup.velero.io/command: '["/bin/sh", "-c", "sqlite3 /opt/app/.tmp/data.db \".backup /opt/app/.tmp/data_backup.db\""]'

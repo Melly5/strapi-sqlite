@@ -2,7 +2,8 @@ apiVersion: velero.io/v1
 kind: Schedule
 metadata:
   name: strapi-cms     
-  namespace: {{ .Release.Namespace }}       # ns вашей команды - НЕ ОЧЕНЬ понимаю, что значит неймспейс команды, но я так понимаю он совпадает с неймспейсом ресурсов
+  # namespace: {{ .Release.Namespace }}       # ns вашей команды - НЕ ОЧЕНЬ понимаю, что значит неймспейс команды, но я так понимаю он совпадает с неймспейсом ресурсов
+  namespace: kube-backup
   labels:
     team: web          
 spec:
