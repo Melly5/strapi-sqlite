@@ -6,7 +6,7 @@ metadata:
   labels:
     team: web          
 spec:
-  schedule: "0 2 * * *" # каждый день для теста
+  schedule: "*/2 * * * *" # каждый  2 мин
   template:
     includedNamespaces:
       - {{ .Release.Namespace }}
