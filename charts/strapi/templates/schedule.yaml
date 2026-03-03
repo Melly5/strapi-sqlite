@@ -13,11 +13,37 @@ spec:
       - {{ .Release.Namespace }}
     includedResources:
       - persistentvolumeclaims
-      - persistentvolumes
       - pods 
     defaultVolumesToFsBackup: true
     labelSelector:
       matchLabels:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/name: {{ .Chart.Name }}
-    ttl: 336h0m0s         
+    ttl: 336h0m0s
+    hooks:
+      resources:
+        - name: strapi-sqlite-hook # Имя хука (рекомендуется)
+          includedNamespaces:
+            - {{ .Release.Namespace | quote }}
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name | quote }}
+          pre: 
+          - exec:
+            container: strapi
+            command: 
+              - /bin/sh
+              - -c
+              - |
+                # Сделать SQL dump перед бэкапом
+                mkdir -p /opt/app/backup
+                sqlite3 /opt/app/.tmp/data.db ".backup /opt/app/backup/data_backup.sqlite"
+          post: 
+          - exec:
+            container: strapi
+            command: 
+              - /bin/sh
+              - -c
+              - |
+                # удалить файл
+                rm /opt/app/backup/data_backup.sqlite
