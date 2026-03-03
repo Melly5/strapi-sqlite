@@ -22,28 +22,33 @@ spec:
     ttl: 336h0m0s
     hooks:
       resources:
-        - name: strapi-sqlite-hook # Имя хука (рекомендуется)
-          includedNamespaces:
-            - {{ .Release.Namespace | quote }}
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/instance: {{ .Release.Name | quote }}
-          pre: 
+        - name: strapi-sqlite-hook
+          pre:
           - exec:
               container: strapi
-              command: 
-                - /bin/sh
-                - -c
-                - |
-                  # Сделать SQL dump перед бэкапом
-                  mkdir -p /opt/app/backup
-                  sqlite3 /opt/app/.tmp/data.db ".backup /opt/app/backup/data_backup.sqlite"
-          post: 
+              command:
+              - /bin/sh
+              - -c
+              - |
+                set -e
+                echo "Starting SQLite backup..."
+                mkdir -p /opt/app/backup
+                if [ -f "/opt/app/.tmp/data.db" ]; then
+                  echo "Found database file at /opt/app/.tmp/data.db"
+                  sqlite3 /opt/app/.tmp/data.db ".backup /opt/app/backup/data_backup_$(date +%Y%m%d_%H%M%S).db"
+                  echo "Backup completed successfully"
+                else
+                  echo "ERROR: Database file NOT found!"
+                  ls -la /opt/app/
+                  exit 1
+                fi
+          post:
           - exec:
               container: strapi
-              command: 
-                - /bin/sh
-                - -c
-                - |
-                  # удалить файл
-                  rm /opt/app/backup/data_backup.sqlite
+              command:
+              - /bin/sh
+              - -c
+              - |
+                echo "Cleaning up temporary files..."
+                rm -f /opt/app/backup/data_backup_*.db
+                echo "Cleanup completed"
