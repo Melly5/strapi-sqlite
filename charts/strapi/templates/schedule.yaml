@@ -18,37 +18,20 @@ spec:
     labelSelector:
       matchLabels:
         app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/name: {{ .Chart.Name }}
     ttl: 336h0m0s
     hooks:
       resources:
         - name: strapi-sqlite-hook
+          includedResources:
+            - pods
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
           pre:
           - exec:
               container: strapi
-              command:
-              - /bin/sh
-              - -c
-              - |
-                set -e
-                echo "Starting SQLite backup..."
-                mkdir -p /opt/app/backup
-                if [ -f "/opt/app/.tmp/data.db" ]; then
-                  echo "Found database file at /opt/app/.tmp/data.db"
-                  sqlite3 /opt/app/.tmp/data.db ".backup /opt/app/backup/data_backup_$(date +%Y%m%d_%H%M%S).db"
-                  echo "Backup completed successfully"
-                else
-                  echo "ERROR: Database file NOT found!"
-                  ls -la /opt/app/
-                  exit 1
-                fi
+              command: ["/bin/sh", "-c", "sqlite3 /opt/app/.tmp/data.db '.backup /opt/app/.tmp/data_backup.db'"]
           post:
           - exec:
               container: strapi
-              command:
-              - /bin/sh
-              - -c
-              - |
-                echo "Cleaning up temporary files..."
-                rm -f /opt/app/backup/data_backup_*.db
-                echo "Cleanup completed"
+              command: ["/bin/sh", "-c", "rm -f /opt/app/.tmp/data_backup.db"]
