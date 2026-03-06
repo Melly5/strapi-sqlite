@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "localcomponents",
+  "info": {
+    "singularName": "localcomponent",
+    "pluralName": "localcomponents",
+    "displayName": "localcomponent"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "meow": {
+      "type": "string"
+    }
+  }
+}
