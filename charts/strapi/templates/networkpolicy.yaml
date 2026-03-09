@@ -3,7 +3,8 @@ kind: NetworkPolicy
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
-  labels: {{ - include "labels" . | nindent 4 }}
+  labels: 
+    {{ - include "labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:
