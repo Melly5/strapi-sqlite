@@ -8,14 +8,16 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: strapi
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: strapi
         {{- include "labels" . | nindent 8 }}
       annotations:
         backup.velero.io/backup-volumes: strapi-data
+        pre.hook.backup.velero.io/command: '["/bin/sh", "-c", "sqlite3 /opt/app/.tmp/data.db \".backup /opt/app/.tmp/data_backup_new.db\""]'
+        post.hook.backup.velero.io/command: '["/bin/sh", "-c", "rm /opt/app/.tmp/data_backup_new.db"]'
+        post.hook.restore.velero.io/command: '["/bin/sh", "-c", "echo \"Restoring database...\" && if [ -f \"/opt/app/.tmp/data_backup_new.db\" ]; then cp /opt/app/.tmp/data_backup_new.db /opt/app/.tmp/data.db && echo \"Database restored\"; else echo \"No backup found\"; fi"]'
     spec:
       containers:
         - name: strapi

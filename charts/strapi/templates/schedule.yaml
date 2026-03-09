@@ -1,37 +1,18 @@
 apiVersion: velero.io/v1
 kind: Schedule
 metadata:
-  name: strapi-cms     
+  name: strapi-cms
   # namespace: {{ .Release.Namespace }}       # ns вашей команды - НЕ ОЧЕНЬ понимаю, что значит неймспейс команды, но я так понимаю он совпадает с неймспейсом ресурсов
   namespace: kube-backup
   labels:
-    team: web          
+    team: web
 spec:
-  schedule: "*/2 * * * *" # каждый  2 мин
+  schedule: "*/10 * * * *" # каждый  день
   template:
     includedNamespaces:
       - {{ .Release.Namespace }}
-    includedResources:
-      - persistentvolumeclaims
-      - pods 
     defaultVolumesToFsBackup: true
     labelSelector:
       matchLabels:
         app.kubernetes.io/instance: {{ .Release.Name }}
-    ttl: 336h0m0s
-    hooks:
-      resources:
-        - name: strapi-sqlite-hook
-          includedResources:
-            - pods
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/instance: {{ .Release.Name }}
-          pre:
-          - exec:
-              container: strapi
-              command: ["/bin/sh", "-c", "sqlite3 /opt/app/.tmp/data.db '.backup /opt/app/.tmp/data_backup.db'"]
-          post:
-          - exec:
-              container: strapi
-              command: ["/bin/sh", "-c", "rm -f /opt/app/.tmp/data_backup.db"]
+    ttl: 2h0m0s

@@ -3,9 +3,7 @@ image:
   tag: latest
   pullPolicy: Never
 
-service:
-  type: ClusterIP
-  port: 1337
+port: 1337
 
 persistence:
   enabled: true
