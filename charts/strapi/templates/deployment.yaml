@@ -37,8 +37,8 @@ spec:
             - containerPort: 1337
           volumeMounts:
             - name: strapi-data
-              mountPath: {{ .Values.persistence.mountPath }}
+              mountPath: /opt/app/.tmp
       volumes:
         - name: strapi-data
           persistentVolumeClaim:
-            claimName: strapi-pvc-local
+            claimName: strapi-sqlite-pvc
