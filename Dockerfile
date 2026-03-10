@@ -2,14 +2,14 @@
 FROM node:18-slim
 
 # 2. Устанавливаем системные зависимости для Strapi и SQLite CLI (для Velero)
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    gcc \
-    make \
-    python3 \
-    libvips-dev \
-    sqlite3 \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y \
+#    build-essential \
+#    gcc \
+#    make \
+#    python3 \
+#    libvips-dev \
+#    sqlite3 \
+#    && rm -rf /var/lib/apt/lists/*
 
 # 3. Указываем рабочую директорию
 WORKDIR /opt/app

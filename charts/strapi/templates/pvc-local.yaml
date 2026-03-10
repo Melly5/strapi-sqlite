@@ -7,7 +7,6 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   storageClassName: local-storage
-  volumeName: strapi-local-pv
   accessModes:
     - ReadWriteOnce
   resources:
