@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: strapi-sqlite-pvc
-  namespace: online-test
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
