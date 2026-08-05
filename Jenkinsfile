@@ -5,7 +5,7 @@ pipeline {
             steps {
                 script {
                     sh 'printenv' 
-                    def gitUrl = env.GIT_URL ?: "git@gitlab.ru:some/groups/web.git"
+                    def gitUrl = "git@gitlab.ru:some/groups/web.git"
                     echo "Полученный воркспейс GitLab: ${( gitUrl =~ /:([^\s]+)\/[^\/]+\.git/)[0][1]}"
                 }
             }
