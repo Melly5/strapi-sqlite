@@ -1,6 +1,12 @@
 pipeline {
     agent any
     stages {
+        stage('Debug Env') {
+            steps {
+                sh 'printenv' 
+
+            }
+        }
         stage('Build Image') {
             steps {
                 // Сборка докер-образа страпи
