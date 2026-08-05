@@ -4,7 +4,8 @@ pipeline {
         stage('Debug Env') {
             steps {
                 sh 'printenv' 
-            echo "Полученный воркспейс GitLab: ${(env.GIT_URL =~ /:([^\s]+)\/[^\/]+\.git/)[0][1]}"
+                 def gitUrl = env.GIT_URL ?: "git@gitlab.ru:some/groups/web.git"
+            echo "Полученный воркспейс GitLab: ${( gitUrl =~ /:([^\s]+)\/[^\/]+\.git/)[0][1]}"
 
             }
         }
